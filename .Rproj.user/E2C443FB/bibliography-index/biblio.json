@@ -1,0 +1,63 @@
+{
+    "sources": [
+        {
+            "DOI": "10.4067/s0717-554x2019000300333",
+            "URL": "http://www.scielo.cl/scielo.php?script=sci_arttext&pid=S0717-554X2019000300333&lng=en&nrm=iso&tlng=en",
+            "author": [
+                {
+                    "family": "Revuelta",
+                    "given": "Beatriz"
+                },
+                {
+                    "family": "Hernández-Arencibia",
+                    "given": "Raynier"
+                }
+            ],
+            "container-title": "Cinta de moebio",
+            "id": "revuelta2019",
+            "issue": "66",
+            "issued": {
+                "date-parts": [
+                    [
+                        2019,
+                        3
+                    ]
+                ]
+            },
+            "language": "en",
+            "page": "333-346",
+            "title": "La teoría de Axel Honneth sobre justicia social, reconocimiento y experiencias del sujeto en las sociedades contemporáneas",
+            "type": "article-journal"
+        },
+        {
+            "DOI": "10.46688/ahmoi.n16.251",
+            "URL": "https://www.archivosrevista.com.ar/numeros/index.php/archivos/article/view/251",
+            "author": [
+                {
+                    "family": "Arruzza",
+                    "given": "Cinzia"
+                },
+                {
+                    "family": "Bhattacharya",
+                    "given": "Tithi"
+                }
+            ],
+            "container-title": "Archivos de historia del movimiento obrero y la izquierda",
+            "id": "arruzza2020",
+            "issue": "16",
+            "issued": {
+                "date-parts": [
+                    [
+                        2020,
+                        3,
+                        22
+                    ]
+                ]
+            },
+            "page": "37-69",
+            "title": "Teoría de la reproducción social. Elementos fundamentales para un feminismo marxista",
+            "type": "article-journal"
+        }
+    ],
+    "project_biblios": []
+}

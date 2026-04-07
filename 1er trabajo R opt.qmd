@@ -1,0 +1,22 @@
+---
+title: "Trabajo 1 R opt"
+author: "Antonia - Florencia Pastenes A."
+date: "04/06/2026"
+format: html
+editor: visual
+lang: es
+theme: cosmo
+css: estilos.css
+---
+
+# Cuidados
+
+La tarea de cuidado ha sido una labor que históricamente ha recaído dentro de los hogares en el género femenino, generando así una serie de barreras para su desarrollo personal (MinMujer & MDSF, 2023). Esto queda demostrado estadísticamente ya que dentro de las personas que cumplen el rol de cuidador/a, las mujeres alcanzan el 51,9%, dirigiendo así en promedio 5,89 hrs de su día al cuidado de la persona en situación de dependencia, en contraste con el 41,6% de los hombres quienes casi alcanzan a los tres horas diarias. Produciendo así una desigualdad en la utilización del tiempo, pues en el caso de las mujeres, retomando lo que se menciona en el diálogo con los ciudadanos/as en “Hablemos de cuidados”, las horas destinadas a lo laboral, y específicamente de ocio y recreatividad quedan nulas para las mujeres. Reforzando esta idea, “en el sistema actual, las mujeres trabajan un tiempo adicional no remunerado y no reconocido que genera inequidades en el uso de tiempo con respecto a los hombres” (ONU Mujeres & CEPAL, 2021).
+
+## Problematización
+
+Este nulo reconocimiento genera aún más carga en las personas cuidadoras, esto debido a la falta de corresponsabilidad social existente. Desde la teoría que plantea Axel Honneth, en las tres esferas de reconocimiento.“El énfasis de la teoría del reconocimiento está en reconocer el sentido de identidad moral de las personas” (Revuelta y Hernández-Arencibia, 2019). Considerando así la afectividad, relacionándolo a las redes de apoyo que tienen las personas (amistades/familiares/conocidos), reconocimiento jurídico, el individuo reconoce sus derechos y obligaciones, como la autoconservación, y por último la esfera de estima social, que contempla la valoración del trabajo personal en la sociedad, consolidando así  la  base de la justicia social. La no valoración del trabajo que cumplen las personas cuidadoras se traduciría en un “desprecio social” hacia ellas, ya que no se estarían reconociendo las tres esferas planteadas, produciendo un aislamiento del individuo en la sociedad, quedando así la autonomía de el/la cuidador/a entregada a las necesidades de la persona con dependencia.
+
+## Actualidad en el país
+
+! \[Presidente Boric en promulgación de la Ley de cuidados
