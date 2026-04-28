@@ -1,0 +1,241 @@
+---
+title: "Rol de cuidado y sobrecarga emocional en mujeres pertenecientes al PRLAC"
+subtitle: "Un estudio sobre pérdida de autonomía de las personas cuidadoras en la             comuna de Independencia"
+author: Antonia Arce - Florencia Pastenes A.
+date: "2026-04-27"
+leng: es
+format: html
+editor: visual
+theme: pulse
+toc: true
+link-citations: true
+bibliography: references.bib
+---
+
+# Introducción
+
+El trabajo de cuidados ha sido históricamente una labor invisibilizada y asignada principalmente a las mujeres, constituyéndose como un eje central en la reproducción de la vida social, pero escasamente reconocido en términos económicos, sociales y políticos. En Chile, esta problemática adquiere especial relevancia considerando la persistente desigualdad de género en la distribución del tiempo y las responsabilidades domésticas. Según el Ministerio de la Mujer y Equidad de Género, las mujeres concentran la mayor parte del trabajo de cuidado no remunerado, destinando en promedio casi el doble de tiempo que los hombres a estas tareas (MinMujer & MDSF, 2023). Esta situación limita sus oportunidades de desarrollo personal, laboral y social, configurando una desigualdad estructural en el uso del tiempo.
+
+En la actualidad, esta problemática se intensifica en un contexto de transformación demográfica caracterizado por el envejecimiento de la población y el aumento de personas en situación de dependencia. De acuerdo con el Instituto Nacional de Estadísticas, las personas mayores representan un porcentaje creciente de la población, lo que incrementa la demanda de cuidados de larga duración (INE, 2025). Este escenario ha sido conceptualizado como una “crisis de los cuidados”, donde las responsabilidades continúan recayendo principalmente en los hogares y, particularmente, en las mujeres, sin una adecuada corresponsabilidad social ni suficiente apoyo institucional.
+
+foto
+
+Para encontrar a estas personas, primero se deberá digitalizar la sección 2 CP presente en el instrumento PC N°06 (anexo 1). Esto con la finalidad de conocer el porcentaje de personas cuidadoras que tienen más sobrecarga en el trabajo del cuidado. Preguntas como: 2.8 ¿Desarrolla alguna otra actividad constante fuera de la casa?, 3.1 ¿Piensa que, debido al tiempo que dedica a su familiar, no tiene suficiente tiempo para usted?, 3.6 ¿Siente que ha perdido el control de su vida desde que comenzó la enfermedad de su familiar? Podrían dar cuenta de la sobrecarga que se estaría llevando el/la cuidador/a, que afectarían negativamente en el autocuidado de esta. 
+
+Con estas preguntas se podrá dar con la población objetivo, cuidadores que cuenten con sobrecarga emocional que necesiten de un espacio que las  incentive a recuperar su sentido de identidad individual. A partir del diagnóstico se iniciará un taller de intervención grupal, con la finalidad de desmitificar la “romantización del cuidado”,  teniendo tres fases, partiendo por la problematización, siguiendo con la re-personificación y terminando con la ocupación de espacios de recreación y ocio sin culpa. Siendo instancias de conversación abierta de las renuncias personales que han enfrentado y cómo estas pueden evolucionar hacia una mayor autopercepción de sí mismas, promoviendo el autocuidado.
+
+# Problematización
+
+Desde una perspectiva sociológica, el trabajo de cuidados puede analizarse a partir de la Teoría de la Reproducción Social, la cual plantea que estas labores son fundamentales para el sostenimiento del sistema capitalista, ya que permiten la reproducción cotidiana y generacional de la fuerza de trabajo [@arruzza2020]. En este sentido, el cuidado no constituye únicamente una práctica privada o familiar, sino una actividad social estructural que sostiene la economía, pese a no ser remunerada ni reconocida. En este sentido, la invisibilización de este trabajo genera, además, procesos de desvalorización social que impactan directamente en la identidad y autonomía de las personas cuidadoras.
+
+Este nulo reconocimiento genera aún más carga en las personas cuidadoras, esto debido a la falta de corresponsabilidad social existente. Desde la teoría que plantea Axel Honneth, en las tres esferas de reconocimiento.“El énfasis de la teoría del reconocimiento está en reconocer el sentido de identidad moral de las personas” [@revuelta2019]. Considerando así la afectividad, relacionándolo a las redes de apoyo que tienen las personas (amistades/familiares/conocidos), reconocimiento jurídico, el individuo reconoce sus derechos y obligaciones, como la autoconservación, y por último la esfera de estima social, que contempla la valoración del trabajo personal en la sociedad, consolidando así  la  base de la justicia social. La no valoración del trabajo que cumplen las personas cuidadoras se traduciría en un “desprecio social” hacia ellas, ya que no se estarían reconociendo las tres esferas planteadas, produciendo un aislamiento del individuo en la sociedad, quedando así la autonomía de el/la cuidador/a entregada a las necesidades de la persona con dependencia.
+
+Teniendo pocos espacios de reconocimiento, apoyo y ayuda, uno de ellos sería el PRLAC municipal, donde pueden encontrar apoyo psicosocial y facilitando un servicio de atención domiciliaria (SAD) para la persona con dependencia por cuatro horas dentro de la semana, permitiendo que la cuidadora a cargo pueda salir a realizar sus trámites postergados por el rol que cumple. Sin embargo este proyecto busca que estas horas disponibles no solo queden en diligencias médicas o bancarias, sino también en un espacio de reconexión, reapropiación de identidad y ocupar sin culpa posibles espacios de recreación y ocio.
+
+En esta línea, el concepto central que orienta esta investigación es la sobrecarga del cuidador, entendida como el conjunto de efectos físicos, emocionales y sociales derivados de la dedicación intensiva al cuidado de una persona en situación de dependencia. Esta sobrecarga se manifiesta en la percepción de falta de tiempo personal, pérdida de control sobre la propia vida y deterioro del bienestar psicológico.
+
+El presente estudio considera cuatro variables extraídas del instrumento PC N°06. Como variables independientes se utilizan: el tiempo de dedicación al cuidado en años cumplidos (ítem 2.1), medida en nivel de razón, pues cuenta con cero absoluto y permite comparaciones proporcionales; las horas diarias dedicadas al cuidado (ítem 2.2), también de nivel de razón, que refleja la intensidad cotidiana del rol; y la realización de actividades constantes afuera del hogar, como la participación de iglesias, juntas de vecinos o centro de deportes comunales (ítem 2.8), variable nominal dicotómica (sí/no) que opera como indicador de autonomía de la persona, podiendo indicar si tiene o no sobrecarga. Como variable dependiente se emplea la percepción de falta de tiempo personal (ítem 3.1), medida en escala ordinal de frecuencia de cinco niveles, desde nunca (1) hasta casi siempre (5), la cual constituye un indicador central de sobrecarga emocional en el rol de cuidado.
+
+Se espera que a mayor tiempo acumulado en el rol (2.1) y mayor intensidad horaria diaria (2.2), más elevada será la percepción de falta de tiempo personal (3.1). Asimismo, se hipotetiza que las cuidadoras no cuentan con espacios suficientes para realizar alguna actividad constante afuera de su hogar (2.7) reportarán niveles más altos de sobrecarga percibida, dado que la dependencia económica restringe adicionalmente su autonomía y sus posibilidades de desvincularse del rol de cuidado.
+
+A partir de lo anterior, en el presente estudio se proponemos analizar la relación entre el rol de cuidado y la sobrecarga emocional en mujeres cuidadoras pertenecientes al Programa Red Local de Apoyos y Cuidados (PRLAC). En términos de hipótesis, se espera que a mayor nivel de dedicación al cuidado y menor disponibilidad de redes de apoyo, mayor será la sobrecarga percibida por las mujeres cuidadoras.\
+
+```{r, setup, include=FALSE}
+library(tidyverse)
+library(haven)
+library(dplyr)
+library(car)
+library(readxl)
+```
+
+```{r}
+bbdd_pc6 <- read_xlsx("../input/instrumento n6_cp2_limpio.xlsx") 
+```
+
+```{r, seleccion de variables, echo=FALSE}
+bbdd_pc_limpia <- bbdd_pc6 %>%
+  select(
+    Sexo,
+    anios_cuidado   = CP_2_1,     # 2.1 Años cuidando (razón)
+    horas_dia       = CP_2_2,     # 2.2 Horas diarias de cuidado (razón)
+    actividad_constante = CP_2_8,    # 2.8 Desarrolla alguna otra actividad constante fuera de la casa 0=No, 1=Sí (nominal)
+    falta_tiempo    = `CP. 3.2`,   # 3.1 Falta de tiempo personal (ordinal)
+    
+    # Sección 3 completa : Variables para índice de sobrecarga 
+      sobre_3_1 = `CP. 3.1`,
+    sobre_3_2 = `CP. 3.2`,
+    sobre_3_3 = `CP. 3.3`,
+    sobre_3_4 = `CP. 3.4`,
+    sobre_3_5 = `CP. 3.5`,
+    sobre_3_6 = `CP. 3.6`,
+    sobre_3_7 = `CP. 3.7`)
+```
+
+```{r, limpieza de variables, echo=FALSE}
+bbdd_pc_limpia <- bbdd_pc_limpia %>%
+    mutate(
+    # Sexo: factor con etiquetas
+    Sexo = factor(Sexo, levels = c(1, 2),
+                  labels = c("Hombre", "Mujer")),
+
+    # Años cuidando: '>1' -> 1, convertir a numérico
+    anios_cuidado = as.numeric(case_when(
+      anios_cuidado == ">1" ~ "1",
+      TRUE ~ as.character(anios_cuidado)
+    )),
+
+    # Horas diarias
+    horas_dia = as.numeric(horas_dia),
+    
+    # Actividad constante afuera del hogar
+      actividad_constante = factor(
+      na_if(as.numeric(actividad_constante), 99),
+      levels = c(0, 1), labels = c('No', 'Si')),
+
+    # Falta de tiempo: factor ordenado
+    falta_tiempo = factor(falta_tiempo, levels = 1:5,
+      labels = c("Nunca","Rara vez","Algunas veces",
+                 "Bastantes veces","Casi siempre"),
+      ordered = TRUE))
+
+```
+
+```{r, creacion de indice, echo=FALSE}
+bbdd_pc_limpia <- bbdd_pc_limpia %>%
+  mutate(
+    indice_sobrecarga = rowSums(
+      select(., sobre_3_1:sobre_3_7),
+      na.rm = FALSE))
+```
+
+```{r, etiquetas, echo=FALSE}
+attr(bbdd_pc_limpia$anios_cuidado,    "label") <- "Años que lleva cuidando a la persona dependiente"
+attr(bbdd_pc_limpia$horas_dia,        "label") <- "Horas diarias dedicadas al cuidado"
+attr(bbdd_pc_limpia$actividad_constante, "label") <- "¿Desarrolla alguna otra actividad constante fuera de la casa? (0=No, 1=Sí)"
+attr(bbdd_pc_limpia$falta_tiempo,     "label") <- "¿Siente que no tiene tiempo para usted? (1=Nunca, 5=Casi siempre)"
+attr(bbdd_pc_limpia$indice_sobrecarga,"label") <- "Índice de sobrecarga: suma ítems 3.1 a 3.7 (rango 17-35)"
+```
+
+```{r, grafico 1, echo=FALSE}
+
+## Gráfico de la población en general:
+
+media_horas   <- mean(bbdd_pc_limpia$horas_dia, na.rm = TRUE)
+mediana_horas <- median(bbdd_pc_limpia$horas_dia, na.rm = TRUE)
+
+# Gráfico de barras morado
+grafico1 <- ggplot(bbdd_pc_limpia %>% filter(!is.na(horas_dia)),
+                   aes(x = factor(horas_dia))) +
+  geom_bar(fill = "#7F77DD", color = "white", alpha = 0.9) +
+  geom_vline(xintercept = which(levels(factor(bbdd_pc_limpia$horas_dia)) == as.character(media_horas)),
+             linetype = "dashed", color = "#26215C", linewidth = 0.9) +
+  geom_vline(xintercept = which(levels(factor(bbdd_pc_limpia$horas_dia)) == as.character(mediana_horas)),
+             linetype = "dotted", color = "#AFA9EC", linewidth = 0.9) +
+  annotate("text",
+           x = which(levels(factor(bbdd_pc_limpia$horas_dia)) == as.character(round(media_horas))) + 0.3,
+           y = 18,
+           label = paste0("Media = ", round(media_horas, 1), " hrs"),
+           color = "#26215C", size = 3.5, hjust = 0) +
+  annotate("text",
+           x = which(levels(factor(bbdd_pc_limpia$horas_dia)) == as.character(mediana_horas)) + 0.3,
+           y = 16,
+           label = paste0("Mediana = ", mediana_horas, " hrs"),
+           color = "#3C3489", size = 3.5, hjust = 0) +
+  labs(
+    title    = "Gráfico 1. Distribución de horas diarias dedicadas al cuidado",
+    subtitle = "Cuidadoras/es del PRLAC, comuna de Independencia",
+    x        = "Horas diarias",
+    y        = "Frecuencia",
+    caption  = "Fuente: Instrumento PC N°06, PRLAC Independencia"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title    = element_text(face = "bold", size = 12),
+    plot.subtitle = element_text(color = "grey50", size = 10),
+    legend.position = "bottom"
+  )
+
+grafico1
+```
+
+## Intensidad y carga diaria a nivel general
+
+Como se aprecia en el **Gráfico 1**, la dedicación diaria al cuidado presenta una distribución con una marcada concentración en torno a las **12 horas (mediana)**, aunque con una media ligeramente superior de **12,8 horas**. Resulta imperativo destacar la naturaleza bimodal o multicausal de esta distribución: mientras un grupo significativo de la muestra se sitúa en la marca de las 12 horas, existe un segundo segmento crítico cuya jornada se extiende entre las **15 y las 22 horas diarias**. Esta evidencia gráfica confirma que, para una parte importante de las personas cuidadoras, la labor de asistencia no constituye una tarea complementaria, sino una ocupación de dedicación casi absoluta.
+
+```{r, grafico 2, echo=FALSE}
+g2 <- bbdd_pc_limpia %>%
+  filter(!is.na(Sexo), !is.na(falta_tiempo)) %>%
+  count(Sexo, falta_tiempo) %>%
+  group_by(Sexo) %>%
+  mutate(pct = n / sum(n) * 100)
+
+paleta_likert <- c(
+  "Nunca"           = "#EEEDFE",
+  "Rara vez"        = "#AFA9EC",
+  "Algunas veces"   = "#7F77DD",
+  "Bastantes veces" = "#534AB7",
+  "Casi siempre"    = "#3C3489")
+
+grafico2 <- ggplot(g2,
+                   aes(x = Sexo, y = pct, fill = falta_tiempo)) +
+  geom_bar(stat = "identity", position = "stack", width = 0.55) +
+  geom_text(aes(label = ifelse(pct >= 6, paste0(round(pct, 0), "%"), "")),
+            position = position_stack(vjust = 0.5),
+            size = 3, color = "white", fontface = "bold") +
+  scale_fill_manual(values = paleta_likert, name = "Frecuencia") +
+  labs(
+    title    = "Gráfico 2. Distribución de horas diarias dedicadas al cuidado por                  sexo",
+    subtitle = "Cuidadoras/es del PRLAC, comuna de Independencia",
+    x        = "Horas diarias",
+    y        = "Frecuencia",
+    caption  = "Fuente: Instrumento PC N°06, PRLAC Independencia") +
+  theme_minimal() 
+grafico2
+```
+
+## Percepción sobre la carencía de tiempo con perspectiva de género
+
+Al analizar la dimensión subjetiva del impacto del cuidado, los datos reflejan una brecha de género significativa en la percepción de la disponibilidad de tiempo personal. Según los resultados del ítem 3.1, el **47% de las mujeres** manifiesta sentir «casi siempre» que no dispone de tiempo para sí misma, una cifra que supera en 9 puntos porcentuales a la reportada por los hombres (**38%**).
+
+Esta disparidad se acentúa al observar los niveles de baja frecuencia: mientras que un **33% de los hombres** declara «nunca» o «rara vez» experimentar esta carencia, solo el **19% de las mujeres** se sitúa en dichas categorías. Estos hallazgos no solo ratifican la mayor carga objetiva de las mujeres en tareas de cuidado, sino que sugieren un impacto diferenciado en su salud mental y bienestar subjetivo, validando la necesidad de aplicar un enfoque de género en las políticas de apoyo al cuidador.
+
+```{r, media de sobrecarga de personas cuidadoras, echo=FALSE}
+
+# media de sobrecarga de personas cuidadoras
+media_sobrecarga_general <- mean(bbdd_pc_limpia$indice_sobrecarga)
+print(media_sobrecarga_general)
+```
+
+```{r, media de sobrecarga de mujeres cuidadoras, echo=FALSE}
+
+# media de sobrecarga de mujeres cuidadoras
+media_sobrecarga_mujeres <- bbdd_pc_limpia %>% 
+  filter(Sexo == "Mujer") %>%           
+  summarise(media = mean(indice_sobrecarga, na.rm = TRUE)) 
+print(media_sobrecarga_mujeres)
+```
+
+```{r, media de sobrecarga de hombres cuidadores, echo=FALSE}
+
+# media de sobrecarga de hombres cuidadores
+media_sobrecarga_mujeres <- bbdd_pc_limpia %>% 
+  filter(Sexo == "Hombre") %>%           
+  summarise(media = mean(indice_sobrecarga, na.rm = TRUE)) 
+print(media_sobrecarga_mujeres)
+```
+
+## Sobre la sobrecarga
+
+La convergencia entre la alta intensidad horaria observada en el histograma y la aguda percepción de saturación temporal en las mujeres permite contextualizar el **índice de sobrecarga global (22,8 puntos)**. Los datos sugieren que la muestra se encuentra en una situación de vulnerabilidad psicométrica, donde la extensión de la jornada de cuidado actúa como el principal predictor de la pérdida de autonomía y del deterioro de la calidad de vida de las personas cuidadoras.
+
+### Otras referencias:
+
+ONU Mujeres & CEPAL (2021). Hacia la construcción de sistemas integrales de cuidados en América Latina y el Caribe. Elementos para su Implementación. Disponible en: <https://lac.unwomen.org/sites/default/files/Field%20Office%20Americas/Documentos/Publicaciones/2021/11/HaciaConstruccionSistemaCuidados_15Nov21-v04.pdf>
+
+Ministerio de Desarrollo Social y Familia. (2024). Orientaciones técnicas: Programa Red Local de Apoyos y Cuidados (PRLAC). Gobierno de Chile.  <https://apoyosycuidados.ministeriodesarrollosocial.gob.cl/storage/docs/Orientaciones_Tecnicas_Programa_Red_Local_de_Apoyos_Cuidados_-PRLAC.pdf>
+
+INE (2015). Encuesta Nacional del Uso del Tiempo 2015 (ENUT). Disponible en: https://
+
+[www.ine.gob.cl/estadisticas/sociales/genero/uso-del-tiempo](http://www.ine.gob.cl/estadisticas/sociales/genero/uso-del-tiempo)
+
+## 
