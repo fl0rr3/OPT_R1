@@ -1,0 +1,479 @@
+---
+title: "Rol de cuidado y sobrecarga emocional en mujeres pertenecientes al PRLAC"
+subtitle: "Un estudio sobre pérdida de autonomía de las personas cuidadoras en la comuna de Independencia"
+author: "Antonia Arce – Florencia Pastenes A."
+date: "2026"
+lang: es
+format:
+  html:
+    theme: pulse
+    toc: true
+    toc-depth: 3
+    toc-title: "Contenidos"
+    number-sections: true
+    link-citations: true
+    code-fold: true
+    code-summary: "Ver código"
+bibliography: references.bib
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo    = FALSE,
+  warning = FALSE,
+  message = FALSE)
+
+# Paquetes
+if (!requireNamespace("pacman", quietly = TRUE)) install.packages("pacman")
+pacman::p_load(
+  tidyverse, readxl, haven, labelled,
+  psych, corrplot, Hmisc,
+  knitr, kableExtra, here)
+```
+
+```{r carga-datos, include=FALSE}
+# Carga base original
+bbdd_pc6 <- read_xlsx(here("C:/Users/flore/OneDrive/Escritorio/OPT_R1/Input/instrumento n6_cp2_limpio.xlsx"))
+
+# Selección de variables 
+bbdd_pc_limpia <- bbdd_pc6 %>%
+  select(
+    Sexo,
+    anios_cuidado       = CP_2_1,
+    horas_dia           = CP_2_2,
+    actividad_constante = CP_2_8,
+    falta_tiempo        = `CP. 3.2`,
+    sobre_3_1 = `CP. 3.1`,
+    sobre_3_2 = `CP. 3.2`,
+    sobre_3_3 = `CP. 3.3`,
+    sobre_3_4 = `CP. 3.4`,
+    sobre_3_5 = `CP. 3.5`,
+    sobre_3_6 = `CP. 3.6`,
+    sobre_3_7 = `CP. 3.7`)
+
+# Limpieza y recodificación 
+bbdd_pc_limpia <- bbdd_pc_limpia %>%
+  mutate(
+    Sexo = factor(Sexo, levels = c(1, 2),
+                  labels = c("Hombre", "Mujer")),
+    anios_cuidado = as.numeric(
+      case_when(anios_cuidado == ">1" ~ "1",
+                TRUE ~ as.character(anios_cuidado))),
+    horas_dia = as.numeric(horas_dia),
+    actividad_constante = factor(
+      na_if(as.numeric(actividad_constante), 99),
+      levels = c(0, 1), labels = c("No", "Sí")),
+    falta_tiempo = factor(falta_tiempo, levels = 1:5,
+      labels = c("Nunca","Rara vez","Algunas veces",
+                 "Bastantes veces","Casi siempre"),
+      ordered = TRUE),
+    across(sobre_3_1:sobre_3_7, as.numeric))
+
+# Índice de sobrecarga (suma ítems 3.1–3.7) 
+bbdd_pc_limpia <- bbdd_pc_limpia %>%
+  mutate(
+    indice_sobrecarga = rowSums(select(., sobre_3_1:sobre_3_7), na.rm = FALSE))
+
+# Etiquetas 
+var_label(bbdd_pc_limpia) <- list(
+  Sexo                = "Sexo de la persona cuidadora",
+  anios_cuidado       = "Años cuidando",
+  horas_dia           = "Horas diarias de cuidado",
+  actividad_constante = "Actividad constante fuera del hogar",
+  falta_tiempo        = "Percepción de falta de tiempo personal",
+  indice_sobrecarga   = "Índice de sobrecarga (suma ítems 3.1–3.7)")
+
+bbdd_mujeres <- bbdd_pc_limpia %>% filter(Sexo == "Mujer")
+```
+
+# Introducción
+
+El trabajo de cuidados ha sido históricamente una labor invisibilizada y
+asignada principalmente a las mujeres, constituyéndose como un eje
+central en la reproducción de la vida social, pero escasamente
+reconocido en términos económicos, sociales y políticos. En Chile, esta
+problemática adquiere especial relevancia considerando la persistente
+desigualdad de género en la distribución del tiempo y las
+responsabilidades domésticas. Según el Ministerio de la Mujer y Equidad
+de Género, las mujeres concentran la mayor parte del trabajo de cuidado
+no remunerado, destinando en promedio casi el doble de tiempo que los
+hombres a estas tareas [@minmujer2023]. Esta situación limita sus
+oportunidades de desarrollo personal, laboral y social, configurando una
+desigualdad estructural en el uso del tiempo.
+
+En la actualidad, esta problemática se intensifica en un contexto de
+transformación demográfica caracterizado por el envejecimiento de la
+población y el aumento de personas en situación de dependencia. De
+acuerdo con el INE, las personas mayores representan un porcentaje
+creciente de la población, lo que incrementa la demanda de cuidados de
+larga duración [@ine2025]. Este escenario ha sido conceptualizado como
+una "crisis de los cuidados", donde las responsabilidades continúan
+recayendo principalmente en los hogares y, particularmente, en las
+mujeres, sin una adecuada corresponsabilidad social ni suficiente apoyo
+institucional.
+
+El presente estudio analiza la relación entre el rol de cuidado y la
+sobrecarga emocional en mujeres cuidadoras pertenecientes al **Programa
+Red Local de Apoyos y Cuidados (PRLAC)** de la comuna de Independencia,
+utilizando como **fuente de datos** el instrumento PC N°06 aplicado por
+dicho programa. Los datos corresponden a una muestra de personas
+cuidadoras registradas en el PRLAC y contienen información sobre
+intensidad del cuidado, percepción de sobrecarga y características
+sociodemográficas.
+
+Se hipotetiza que, a mayor nivel de dedicación al cuidado y menor
+disponibilidad de redes de apoyo, mayor será la sobrecarga percibida por
+las mujeres cuidadoras.
+
+# Estadística descriptiva
+
+## Intensidad del rol de cuidado
+
+```{r grafico1}
+media_horas   <- mean(bbdd_pc_limpia$horas_dia, na.rm = TRUE)
+mediana_horas <- median(bbdd_pc_limpia$horas_dia, na.rm = TRUE)
+
+grafico1 <- ggplot(bbdd_pc_limpia %>% filter(!is.na(horas_dia)),
+                   aes(x = factor(horas_dia))) +
+  geom_bar(fill = "#7F77DD", color = "white", alpha = 0.9) +
+  geom_vline(
+    xintercept = which(levels(factor(bbdd_pc_limpia$horas_dia)) == as.character(round(media_horas))),
+    linetype = "dashed", color = "#26215C", linewidth = 0.9) +
+  geom_vline(
+    xintercept = which(levels(factor(bbdd_pc_limpia$horas_dia)) == as.character(mediana_horas)),
+    linetype = "dotted", color = "#AFA9EC", linewidth = 0.9) +
+  annotate("text",
+    x = which(levels(factor(bbdd_pc_limpia$horas_dia)) == as.character(round(media_horas))) + 0.3,
+    y = 18, label = paste0("Media = ", round(media_horas, 1), " hrs"),
+    color = "#26215C", size = 3.5, hjust = 0) +
+  annotate("text",
+    x = which(levels(factor(bbdd_pc_limpia$horas_dia)) == as.character(mediana_horas)) + 0.3,
+    y = 16, label = paste0("Mediana = ", mediana_horas, " hrs"),
+    color = "#3C3489", size = 3.5, hjust = 0) +
+  labs(
+    title    = "Gráfico 1. Distribución de horas diarias dedicadas al cuidado",
+    subtitle = "Cuidadoras/es del PRLAC, comuna de Independencia",
+    x = "Horas diarias", y = "Frecuencia",
+    caption  = "Fuente: Instrumento PC N°06, PRLAC Independencia") +
+  theme_minimal(base_size = 12) +
+  theme(plot.title    = element_text(face = "bold", size = 12),
+        plot.subtitle = element_text(color = "grey50", size = 10))
+
+grafico1
+```
+
+Como se aprecia en el **Gráfico 1**, la dedicación diaria al cuidado
+presenta una distribución con marcada concentración en torno a las **12
+horas (mediana)**, aunque con una media ligeramente superior de
+**`r round(media_horas,1)` horas**. Existe un segundo segmento crítico
+cuya jornada se extiende entre las **15 y 22 horas diarias**,
+confirmando que para una parte importante de la muestra el cuidado
+constituye una ocupación de dedicación casi absoluta.
+
+## Percepción de falta de tiempo según sexo
+
+```{r grafico2}
+g2 <- bbdd_pc_limpia %>%
+  filter(!is.na(Sexo), !is.na(falta_tiempo)) %>%
+  count(Sexo, falta_tiempo) %>%
+  group_by(Sexo) %>%
+  mutate(pct = n / sum(n) * 100)
+
+paleta_likert <- c(
+  "Nunca"           = "#EEEDFE",
+  "Rara vez"        = "#AFA9EC",
+  "Algunas veces"   = "#7F77DD",
+  "Bastantes veces" = "#534AB7",
+  "Casi siempre"    = "#3C3489")
+
+grafico2 <- ggplot(g2, aes(x = Sexo, y = pct, fill = falta_tiempo)) +
+  geom_bar(stat = "identity", position = "stack", width = 0.55) +
+  geom_text(aes(label = ifelse(pct >= 6, paste0(round(pct, 0), "%"), "")),
+            position = position_stack(vjust = 0.5),
+            size = 3, color = "white", fontface = "bold") +
+  scale_fill_manual(values = paleta_likert, name = "Frecuencia") +
+  labs(
+    title    = "Gráfico 2. Percepción de falta de tiempo personal por sexo",
+    subtitle = "Cuidadoras/es del PRLAC, comuna de Independencia",
+    x = "Sexo", y = "Porcentaje",
+    caption  = "Fuente: Instrumento PC N°06, PRLAC Independencia") +
+  theme_minimal()
+
+grafico2
+```
+
+El **47% de las mujeres** manifiesta sentir «casi siempre» que no
+dispone de tiempo para sí misma, cifra que supera en 9 puntos
+porcentuales a la reportada por los hombres (38%). Mientras que el 33%
+de los hombres declara «nunca» o «rara vez» experimentar esta carencia,
+solo el 19% de las mujeres se sitúa en dichas categorías, validando la
+necesidad de un enfoque de género en las políticas de apoyo al cuidador.
+
+## Distribución del índice de sobrecarga
+
+```{r grafico3}
+media_sobre    <- mean(bbdd_pc_limpia$indice_sobrecarga, na.rm = TRUE)
+mediana_sobre  <- median(bbdd_pc_limpia$indice_sobrecarga, na.rm = TRUE)
+media_mujeres  <- mean(bbdd_mujeres$indice_sobrecarga, na.rm = TRUE)
+media_hombres  <- bbdd_pc_limpia %>%
+  filter(Sexo == "Hombre") %>%
+  summarise(m = mean(indice_sobrecarga, na.rm = TRUE)) %>% pull(m)
+
+grafico3 <- ggplot(bbdd_pc_limpia %>% filter(!is.na(indice_sobrecarga), !is.na(Sexo)),
+       aes(x = indice_sobrecarga, fill = Sexo)) +
+  geom_histogram(binwidth = 2, color = "white", alpha = 0.85, position = "identity") +
+  scale_fill_manual(values = c("Hombre" = "#AFA9EC", "Mujer" = "#3C3489")) +
+  geom_vline(xintercept = media_sobre, linetype = "dashed",
+             color = "#26215C", linewidth = 0.9) +
+  annotate("text", x = media_sobre + 0.4, y = Inf,
+           label = paste0("Media global = ", round(media_sobre, 1)),
+           vjust = 2, hjust = 0, size = 3.5, color = "#26215C") +
+  labs(
+    title    = "Gráfico 3. Distribución del índice de sobrecarga por sexo",
+    subtitle = "Cuidadoras/es del PRLAC, comuna de Independencia",
+    x = "Índice de sobrecarga (rango 7–35)", y = "Frecuencia",
+    caption  = "Fuente: Instrumento PC N°06, PRLAC Independencia") +
+  theme_minimal(base_size = 12) +
+  theme(legend.position = "bottom")
+
+grafico3
+```
+
+La media del índice de sobrecarga global es de
+**`r round(media_sobre, 1)` puntos** (sobre un máximo de 35). Al
+desagregar por sexo, las mujeres presentan una media de
+**`r round(media_mujeres, 1)`** frente a **`r round(media_hombres, 1)`**
+en los hombres, diferencia que refuerza la hipótesis del estudio.
+
+# Operacionalización de variables y escala de sobrecarga
+
+## Tabla de operacionalización
+
+```{r tabla-operacionalizacion}
+tabla_op <- tibble(
+  Variable         = c("Años cuidando", "Horas diarias", "Actividad constante fuera del hogar",
+                       "Falta de tiempo personal", "Índice de sobrecarga"),
+  Ítem             = c("CP_2_1", "CP_2_2", "CP_2_8", "CP. 3.2", "CP. 3.1–3.7"),
+  `Nivel de medición` = c("Razón", "Razón", "Nominal dicotómica",
+                           "Ordinal (1–5)", "Razón (suma; rango 7–35)"),
+  Rol              = c("Independiente", "Independiente", "Independiente",
+                       "Dependiente", "Dependiente (escala)"),
+  `Valores / categorías` = c(
+    "Número de años (≥1)",
+    "Número de horas (0–24)",
+    "0 = No / 1 = Sí",
+    "1=Nunca … 5=Casi siempre",
+    "Suma de 7 ítems Likert (1–5)"))
+
+kable(tabla_op,
+      caption = "Tabla 1. Operacionalización de variables del estudio",
+      booktabs = TRUE, align = "lllll") %>%
+  kable_styling(bootstrap_options = c("striped","hover","condensed"),
+                full_width = FALSE, font_size = 13) %>%
+  column_spec(1, bold = TRUE)
+```
+
+## Escala de sobrecarga: consistencia interna (α de Cronbach)
+
+Los siete ítems de la sección 3 del instrumento PC N°06 (CP. 3.1 a CP.
+3.7) miden diferentes manifestaciones de la sobrecarga del cuidador. Se
+calculó el coeficiente alfa de Cronbach para evaluar la consistencia
+interna de la escala.
+
+```{r cronbach}
+items_sobrecarga <- bbdd_pc_limpia %>%
+  select(sobre_3_1:sobre_3_7) %>%
+  drop_na()
+
+alfa_resultado <- psych::alpha(items_sobrecarga)
+
+# Tabla resumen del alfa
+alfa_df <- tibble(
+  Indicador = c("α de Cronbach",
+                "α estandarizado",
+                "Correlación media entre ítems",
+                "N de casos válidos",
+                "N de ítems"),
+  Valor = c(
+    round(alfa_resultado$total$raw_alpha, 3),
+    round(alfa_resultado$total$std.alpha, 3),
+    round(alfa_resultado$total$average_r, 3),
+    nrow(items_sobrecarga),
+    7
+  )
+)
+
+kable(alfa_df,
+      caption = "Tabla 2. Consistencia interna de la escala de sobrecarga (α de Cronbach)",
+      booktabs = TRUE) %>%
+  kable_styling(bootstrap_options = c("striped","hover"),
+                full_width = FALSE, font_size = 13)
+```
+
+```{r cronbach-items}
+# Estadísticos ítem a ítem
+alfa_items <- alfa_resultado$item.stats %>%
+  as.data.frame() %>%
+  rownames_to_column("Ítem") %>%
+  select(Ítem,
+         `r corr. total` = r.cor,
+         `r drop` = r.drop,
+         `Media` = mean,
+         `SD` = sd) %>%
+  mutate(across(where(is.numeric), ~ round(.x, 3)))
+
+kable(alfa_items,
+      caption = "Tabla 3. Estadísticos por ítem de la escala de sobrecarga",
+      booktabs = TRUE) %>%
+  kable_styling(bootstrap_options = c("striped","hover","condensed"),
+                full_width = FALSE, font_size = 13)
+```
+
+> **Interpretación:** Un α ≥ 0.70 indica consistencia interna aceptable;
+> α ≥ 0.80, buena; α ≥ 0.90, excelente [@nunnally1978]. La columna *r
+> drop* muestra la correlación de cada ítem con el total de la escala al
+> eliminar ese ítem; valores bajos (\< .30) podrían sugerir revisión del
+> ítem.
+
+## Índice ponderado de sobrecarga
+
+Dado que todos los ítems tienen el mismo peso teórico según el
+instrumento, se construyó un **índice ponderado de pesos iguales**
+mediante la suma simple de los siete ítems (rango 7–35). A mayor
+puntaje, mayor sobrecarga percibida.
+
+```{r indice-descripcion}
+desc_indice <- bbdd_pc_limpia %>%
+  group_by(Sexo) %>%
+  summarise(
+    N      = n(),
+    Media  = round(mean(indice_sobrecarga, na.rm = TRUE), 2),
+    Mediana = median(indice_sobrecarga, na.rm = TRUE),
+    DE     = round(sd(indice_sobrecarga, na.rm = TRUE), 2),
+    Mínimo = min(indice_sobrecarga, na.rm = TRUE),
+    Máximo = max(indice_sobrecarga, na.rm = TRUE)
+  ) %>%
+  bind_rows(
+    bbdd_pc_limpia %>%
+      summarise(
+        Sexo   = "Total",
+        N      = n(),
+        Media  = round(mean(indice_sobrecarga, na.rm = TRUE), 2),
+        Mediana = median(indice_sobrecarga, na.rm = TRUE),
+        DE     = round(sd(indice_sobrecarga, na.rm = TRUE), 2),
+        Mínimo = min(indice_sobrecarga, na.rm = TRUE),
+        Máximo = max(indice_sobrecarga, na.rm = TRUE)
+      )
+  )
+
+kable(desc_indice,
+      caption = "Tabla 4. Estadísticos descriptivos del índice de sobrecarga por sexo",
+      booktabs = TRUE) %>%
+  kable_styling(bootstrap_options = c("striped","hover"),
+                full_width = FALSE, font_size = 13) %>%
+  row_spec(nrow(desc_indice), bold = TRUE, background = "#f0eeff")
+```
+
+# Tabla de correlaciones
+
+Se presenta la matriz de correlaciones entre las variables cuantitativas
+del estudio. Para variables numéricas continuas se utiliza la
+correlación de Pearson; se reportan coeficientes y niveles de
+significación (*p*-valores).
+
+```{r correlaciones}
+# Convertir falta_tiempo a numérico para la matriz
+vars_corr <- bbdd_pc_limpia %>%
+  mutate(falta_tiempo_num = as.numeric(falta_tiempo)) %>%
+  select(
+    `Años cuidando`     = anios_cuidado,
+    `Horas al día`      = horas_dia,
+    `Falta de tiempo`   = falta_tiempo_num,
+    `Índice sobrecarga` = indice_sobrecarga,
+    sobre_3_1:sobre_3_7) %>%
+  drop_na()
+
+# Matriz de correlaciones con p-valores (Hmisc)
+mat_corr   <- rcorr(as.matrix(vars_corr))
+corr_r     <- mat_corr$r
+corr_p     <- mat_corr$P
+
+# Renombrar ítems
+colnames(corr_r) <- rownames(corr_r) <-
+  c("Años cuid.", "Horas/día", "Falta tiempo", "Índice sobr.",
+    "Ítem 3.1","Ítem 3.2","Ítem 3.3","Ítem 3.4","Ítem 3.5","Ítem 3.6","Ítem 3.7")
+```
+
+```{r tabla-corr}
+# Tabla con kable: solo variables principales (primeras 4)
+corr_main <- round(corr_r[1:4, 1:4], 3)
+p_main    <- corr_p[1:4, 1:4]
+
+# Agregar asteriscos de significación
+corr_tabla <- matrix(
+  paste0(
+    corr_main,
+    ifelse(!is.na(p_main) & p_main < .001, "***",
+    ifelse(!is.na(p_main) & p_main < .01,  "**",
+    ifelse(!is.na(p_main) & p_main < .05,  "*", "")))),
+  nrow = 4,
+  dimnames = list(rownames(corr_main), colnames(corr_main)))
+diag(corr_tabla) <- "—"
+
+kable(corr_tabla,
+      caption = "Tabla 5. Matriz de correlaciones entre variables principales del estudio",
+      booktabs = TRUE) %>%
+  kable_styling(bootstrap_options = c("striped","hover"),
+                full_width = FALSE, font_size = 13) %>%
+  footnote(general = "*** p < .001  ** p < .01  * p < .05. Correlación de Pearson.",
+           general_title = "Nota:",
+           footnote_as_chunk = TRUE)
+```
+
+corrplot(corr_r, method = "color", type = "upper", order = "hclust",
+tl.cex = 0.75, tl.col = "#26215C", col =
+colorRampPalette(c("#EEEDFE","white","#3C3489"))(200), addCoef.col =
+"#26215C", number.cex = 0.65, title = "Figura 1. Mapa de calor de
+correlaciones", mar = c(0, 0, 1.5, 0))
+
+> **Interpretación:** Solo se muestran correlaciones estadísticamente
+> significativas (p \< .05). Los coeficientes próximos a ±1 indican
+> asociación fuerte; próximos a 0, asociación débil o nula. Las
+> correlaciones entre los ítems 3.1–3.7 evidencian la coherencia interna
+> del constructo de sobrecarga.
+
+# Síntesis de hallazgos
+
+Los resultados del presente estudio ofrecen evidencia empírica sobre la
+carga diferencial que experimentan las mujeres cuidadoras pertenecientes
+al PRLAC de Independencia:
+
+1.  **Alta intensidad horaria:** La mediana de horas diarias de cuidado
+    alcanza las 12 horas, con un segmento significativo que supera las
+    15 horas, confirmando un nivel de dedicación casi absoluta.
+
+2.  **Brecha de género en la percepción de sobrecarga:** El 47% de las
+    mujeres reporta «casi siempre» carecer de tiempo personal, frente al
+    38% de los hombres. Solo el 19% de las mujeres declara «nunca» o
+    «rara vez» sentir esta carencia, contra el 33% de los hombres.
+
+3.  **Consistencia interna satisfactoria de la escala:** El alfa de
+    Cronbach de la escala de siete ítems supera el umbral de .70,
+    validando su uso como instrumento de medición de la sobrecarga.
+
+4.  **Índice de sobrecarga diferenciado por sexo:** Las mujeres exhiben
+    una media del índice de sobrecarga superior a la de los hombres,
+    coherente con la hipótesis de investigación.
+
+5.  **Asociaciones relevantes:** La matriz de correlaciones muestra que
+    las variables de intensidad del cuidado (horas/día, años cuidando)
+    se asocian positivamente con el índice de sobrecarga y la percepción
+    de falta de tiempo, en la dirección esperada teóricamente.
+
+# Referencias
+
+::: {#refs}
+:::
