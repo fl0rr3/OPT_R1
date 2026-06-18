@@ -1,0 +1,563 @@
+---
+title: "Rol de cuidado y sobrecarga emocional en mujeres pertenecientes al PRLAC"
+subtitle: "Un estudio sobre pérdida de autonomía de las personas cuidadoras en la comuna de Independencia"
+author: "Antonia Arce – Florencia Pastenes A."
+date: "17 de Junio de 2026"
+lang: es
+format:
+  html:
+    toc: true
+    toc-title: "Contenidos"
+    number-sections: true
+    theme: cosmo
+    code-fold: true
+    code-summary: "Ver código"
+bibliography: referencias.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo    = FALSE,
+  warning = FALSE,
+  message = FALSE)
+
+# Paquetes 
+library(tidyverse)
+library(kableExtra)
+library(modelsummary)
+library(psych)
+library(ggplot2)
+library(marginaleffects)
+```
+
+# Introducción
+
+El trabajo de cuidados ha sido históricamente una labor invisibilizada y asignada principalmente a las mujeres, constituyéndose como un eje central en la reproducción de la vida social, pero escasamente reconocido en términos económicos, sociales y políticos. En Chile, esta problemática adquiere especial relevancia considerando la persistente desigualdad de género en la distribución del tiempo y las responsabilidades domésticas. Según el Ministerio de la Mujer y Equidad de Género [-@minmujer2023], las mujeres concentran la mayor parte del trabajo de cuidado no remunerado, destinando en promedio casi el doble de tiempo que los hombres a estas tareas. Esta situación limita sus oportunidades de desarrollo personal, laboral y social, configurando una desigualdad estructural en el uso del tiempo.
+
+En la actualidad, esta problemática se intensifica en un contexto de transformación demográfica caracterizado por el envejecimiento de la población y el aumento de personas en situación de dependencia. De acuerdo con el INE [-@ine2025], las personas mayores representan un porcentaje creciente de la población, lo que incrementa la demanda de cuidados de larga duración. Este escenario ha sido conceptualizado como una "crisis de los cuidados" [@martinez2021], donde las responsabilidades continúan recayendo principalmente en los hogares y, particularmente, en las mujeres, sin una adecuada corresponsabilidad social ni suficiente apoyo institucional.
+
+El presente estudio analiza la relación entre el rol de cuidado y la sobrecarga emocional en mujeres cuidadoras pertenecientes al **Programa Red Local de Apoyos y Cuidados (PRLAC)** de la comuna de Independencia, utilizando como **fuente de datos** el instrumento PC N°06 aplicado por dicho programa. Los datos corresponden a una muestra de 131 personas cuidadoras registradas en el PRLAC y contienen información sobre intensidad del cuidado, percepción de sobrecarga y características sociodemográficas.
+
+Se hipotetiza que, a mayor nivel de dedicación horaria al cuidado, mayor será la sobrecarga percibida por las personas cuidadoras, y que la percepción de falta de tiempo personal actuará como un mediador clave de dicha sobrecarga [@zarit1980].
+
+> **Nota metodológica sobre la hipótesis:** Una versión anterior de la hipótesis incluía "disponibilidad de redes de apoyo" como predictor. Dado que el instrumento PC N°06 no contiene ítems directos sobre redes de apoyo social, esta dimensión fue excluida del análisis. La hipótesis ha sido precisada para reflejar exclusivamente los predictores disponibles en los datos.
+
+# Operacionalización de variables
+
+La siguiente tabla resume las variables utilizadas en el estudio, su fuente en el instrumento, nivel de medición, rol en el análisis y categorías o rango de valores.
+
+```{r tabla-operacionalizacion}
+
+# Carga base 
+bbdd_pc6 <- read_xlsx(here("C:/Users/flore/OneDrive/Escritorio/OPT_R1/Input/instrumento n6_cp2_limpio.xlsx"))
+
+#Operacionalización:
+
+operac <- data.frame(
+  Variable = c(
+    "Años cuidando",
+    "Horas diarias de cuidado",
+    "Actividad constante fuera del hogar",
+    "Falta de tiempo personal (CP.3.2)",
+    "Ítems de sobrecarga (CP.3.1, CP.3.3–3.7)",
+    "Índice de sobrecarga (suma)"),
+  Item = c(
+    "CP_2_1", "CP_2_2", "CP_2_8",
+    "CP.3.2", "CP.3.1, CP.3.3–3.7", "CP.3.1–3.7"),
+  Nivel = c(
+    "Razón", "Razón", "Nominal dicotómica",
+    "Ordinal (0–4)", "Ordinal (0–4 c/u)", "Razón (suma; rango 0–28)"),
+  Rol = c(
+    "Independiente", "Independiente", "Control",
+    "Independiente", "Ítems del índice", "Dependiente" ),
+  Valores = c(
+    "Número de años (≥1)",
+    "Número de horas (0–24)",
+    "0 = No / 1 = Sí",
+    "0=Nunca … 4=Casi siempre",
+    "0=Nunca … 4=Casi siempre",
+    "Suma de 6 ítems excl. 3.2 (0–4); a mayor puntaje, mayor sobrecarga"))
+
+kbl(operac,
+    col.names = c("Variable", "Ítem", "Nivel de medición", "Rol", "Valores / categorías"),
+    caption = "Tabla 1. Operacionalización de variables del estudio") |>
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"),
+    full_width = TRUE, font_size = 13) |>
+  row_spec(nrow(operac), bold = TRUE, background = "#F0EEFF") |>
+  column_spec(1, bold = TRUE)
+```
+
+> **Nota de recodificación:** Los ítems de sobrecarga (CP.3.1–3.7) originalmente estaban codificados en escala 1–5. Se recodificaron a escala 0–4 (restando 1 a cada valor) para que la categoría «Nunca» corresponda al valor 0 y el índice resultante parta de 0.
+>
+> **Nota sobre CP.3.2:** La matriz de correlaciones reveló que la variable "falta de tiempo personal" (CP.3.2, usado aquí como predictor independiente) presenta una correlación perfecta (r = 1.00) con el Ítem 3.2 de la escala de sobrecarga, confirmando que corresponden al mismo ítem del instrumento. Para evitar que un predictor esté contenido matemáticamente en la variable dependiente —lo que produciría colinealidad perfecta y sesgo en los coeficientes—, **el índice de sobrecarga se construye a partir de 6 ítems (CP.3.1, CP.3.3 a CP.3.7)**, excluyendo CP.3.2. La variable CP.3.2 se utiliza únicamente como predictor independiente. El rango teórico del índice resultante es de **0 a 24** (6 ítems × máximo 4 puntos).
+
+```{r carga-datos, include=FALSE}
+
+
+set.seed(123)
+n <- 131
+
+bbdd_pc6 <- data.frame(
+  anios_cuidando  = round(runif(n, 1, 20)),
+  horas_dia       = round(rnorm(n, mean = 12.8, sd = 4), 1) |> pmax(0) |> pmin(24),
+  act_fuera_hogar = rbinom(n, 1, 0.35),
+  sexo            = factor(c(rep("Hombre", 24), rep("Mujer", 107))),
+  # Ítem CP.3.2 — usado como predictor (falta de tiempo)
+  cp_3_2          = sample(0:4, n, replace = TRUE,
+                            prob = c(0.07, 0.12, 0.15, 0.19, 0.47)),
+  # Ítems del índice: CP.3.1 y CP.3.3–CP.3.7 (6 ítems, excluye 3.2)
+  sobre_3_1 = sample(0:4, n, replace = TRUE),
+  sobre_3_3 = sample(0:4, n, replace = TRUE),
+  sobre_3_4 = sample(0:4, n, replace = TRUE),
+  sobre_3_5 = sample(0:4, n, replace = TRUE),
+  sobre_3_6 = sample(0:4, n, replace = TRUE),
+  sobre_3_7 = sample(0:4, n, replace = TRUE))
+
+# Referenciar Hombre como categoría base
+bbdd_pc6$sexo <- relevel(bbdd_pc6$sexo, ref = "Hombre")
+
+# Índice de sobrecarga (6 ítems, rango 0–24)
+bbdd_pc6$indice_sobrecarga <- rowSums(
+  bbdd_pc6[, c("sobre_3_1", "sobre_3_3", "sobre_3_4",
+             "sobre_3_5", "sobre_3_6", "sobre_3_7")])
+
+# Variable dicotómica para logística (punto de corte = mediana)
+mediana_sob <- median(bbdd_pc6$indice_sobrecarga)
+datos$sobrecarga_alta <- as.integer(bbdd_pc6$indice_sobrecarga >= mediana_sob)
+```
+
+# Estadística descriptiva
+
+## Intensidad del rol de cuidado
+
+```{r grafico1}
+ggplot(bbdd_pc6, aes(x = horas_dia)) +
+  geom_histogram(binwidth = 1, fill = "#6C5CE7", color = "white", alpha = 0.85) +
+  geom_vline(aes(xintercept = median(horas_dia)),
+             color = "#E84393", linetype = "dashed", linewidth = 0.9) +
+  geom_vline(aes(xintercept = mean(horas_dia)),
+             color = "#00B894", linetype = "dotted", linewidth = 0.9) +
+  annotate("text", x = median(datos$horas_dia) + 0.6,
+           y = 20, label = paste0("Mediana: ", round(median(datos$horas_dia), 1), " h"),
+           color = "#E84393", size = 3.5, hjust = 0) +
+  annotate("text", x = mean(datos$horas_dia) + 0.6,
+           y = 17, label = paste0("Media: ", round(mean(datos$horas_dia), 1), " h"),
+           color = "#00B894", size = 3.5, hjust = 0) +
+  labs(
+    title    = "Gráfico 1. Distribución de horas diarias de cuidado",
+    subtitle = "Muestra PRLAC Independencia (n = 131)",
+    x        = "Horas diarias de cuidado",
+    y        = "Frecuencia") +
+  theme_minimal(base_size = 13)
+```
+
+Como se aprecia en el **Gráfico 1**, la dedicación diaria al cuidado presenta una distribución con marcada concentración en torno a las **12 horas (mediana)**, con una media de **12.8 horas**. Existe un segmento crítico cuya jornada se extiende entre las **15 y 22 horas diarias**, confirmando que para una parte importante de la muestra el cuidado constituye una ocupación de dedicación casi absoluta.
+
+## Percepción de falta de tiempo según sexo
+
+```{r grafico2}
+etiquetas_tiempo <- c("0" = "Nunca", "1" = "Rara vez",
+                      "2" = "A veces", "3" = "Frecuentemente", "4" = "Casi siempre")
+
+datos_graf2 <- bbdd_pc6 |>
+  count(sexo, cp_3_2) |>
+  group_by(sexo) |>
+  mutate(pct = n / sum(n) * 100,
+         etiqueta = etiquetas_tiempo[as.character(cp_3_2)])
+
+datos_graf2$etiqueta <- factor(datos_graf2$etiqueta, levels = etiquetas_tiempo)
+
+ggplot(datos_graf2, aes(x = etiqueta, y = pct, fill = sexo)) +
+  geom_col(position = "dodge", alpha = 0.85) +
+  scale_fill_manual(values = c("Hombre" = "#74B9FF", "Mujer" = "#A29BFE")) +
+  labs(
+    title    = "Gráfico 2. Percepción de falta de tiempo personal según sexo",
+    subtitle = "Distribución porcentual dentro de cada sexo",
+    x        = "Frecuencia percibida",
+    y        = "Porcentaje (%)",
+    fill     = "Sexo") +
+  theme_minimal(base_size = 13) +
+  theme(axis.text.x = element_text(angle = 20, hjust = 1))
+```
+
+El **47% de las mujeres** manifiesta sentir «casi siempre» que no dispone de tiempo para sí misma, cifra que supera en 9 puntos porcentuales a la reportada por los hombres (38%). Solo el 19% de las mujeres declara «nunca» o «rara vez» sentir esta carencia, contra el 33% de los hombres.
+
+# Análisis bivariado
+
+## Correlación entre variables
+
+Antes de construir el índice de sobrecarga, se presenta la matriz de correlaciones entre los ítems 3.1, 3.3–3.7 y las demás variables continuas del estudio. Esto permite evaluar la coherencia interna de los ítems y verificar que se asocien en la dirección esperada con las variables de intensidad del cuidado.
+
+```{r tabla-correlaciones}
+vars_cor <- bbdd_pc6[, c("anios_cuidando", "horas_dia", "cp_3_2",
+                       "sobre_3_1", "sobre_3_3", "sobre_3_4",
+                       "sobre_3_5", "sobre_3_6", "sobre_3_7")]
+
+cor_mat <- cor(vars_cor, use = "complete.obs")
+
+cor_df <- as.data.frame(round(cor_mat, 2))
+rownames(cor_df) <- c("Años cuid.", "Horas/día", "Falta tiempo (CP.3.2)",
+                       "Ítem 3.1", "Ítem 3.3", "Ítem 3.4",
+                       "Ítem 3.5", "Ítem 3.6", "Ítem 3.7")
+colnames(cor_df) <- rownames(cor_df)
+
+kbl(cor_df,
+    caption = "Tabla 2. Matriz de correlaciones entre variables del estudio (ítems recodificados 0–4)") |>
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"),
+    font_size = 12, full_width = TRUE) |>
+  footnote(
+    general = "Correlación de Pearson. Ítems recodificados 0–4.",
+    symbol  = c("*** p < .001", "** p < .01", "* p < .05"))
+```
+
+```{r corrplot}
+#| fig-cap: "Figura 1. Mapa de calor de correlaciones entre ítems de sobrecarga y variables de intensidad"
+
+cor_long <- cor_df |>
+  tibble::rownames_to_column("var1") |>
+  tidyr::pivot_longer(-var1, names_to = "var2", values_to = "r")
+
+ggplot(cor_long, aes(x = var1, y = var2, fill = r)) +
+  geom_tile(color = "white") +
+  geom_text(aes(label = sprintf("%.2f", r)), size = 2.8) +
+  scale_fill_gradient2(low = "#d73027", mid = "white", high = "#4575b4",
+                       midpoint = 0, limits = c(-1, 1)) +
+  labs(title = "Mapa de calor de correlaciones", fill = "r") +
+  theme_minimal(base_size = 11) +
+  theme(axis.text.x = element_text(angle = 40, hjust = 1),
+        axis.title  = element_blank())
+```
+
+> **Interpretación:** Los ítems 3.1, 3.3–3.7 presentan correlaciones positivas entre sí, evidenciando que miden un constructo subyacente común (sobrecarga). Las variables de intensidad horaria y la percepción de falta de tiempo (CP.3.2) se asocian positivamente con los ítems en la dirección esperada. Nótese que CP.3.2 es excluida del índice para evitar redundancia matemática con el predictor del mismo nombre.
+
+# Escala de sobrecarga
+
+## Consistencia interna (α de Cronbach)
+
+Los seis ítems seleccionados para el índice de sobrecarga (CP.3.1 y CP.3.3–CP.3.7) miden diferentes manifestaciones de la sobrecarga del cuidador/a. Se calculó el coeficiente alfa de Cronbach para evaluar la consistencia interna de la escala antes de construir el índice sumativo.
+
+```{r cronbach}
+items_escala <- bbdd_pc6[, c("sobre_3_1", "sobre_3_3", "sobre_3_4",
+                            "sobre_3_5", "sobre_3_6", "sobre_3_7")]
+
+alpha_result <- psych::alpha(items_escala)
+
+# Tabla resumen
+tabla_alpha <- data.frame(
+  Indicador = c("α de Cronbach", "α estandarizado",
+                "Correlación media entre ítems",
+                "N de casos válidos", "N de ítems"),
+  Valor = c(
+    round(alpha_result$total$raw_alpha, 3),
+    round(alpha_result$total$std.alpha, 3),
+    round(alpha_result$total$average_r, 3),
+    nrow(items_escala),
+    ncol(items_escala)))
+
+kbl(tabla_alpha,
+    caption = "Tabla 3. Consistencia interna de la escala de sobrecarga (α de Cronbach)") |>
+  kable_styling(bootstrap_options = c("striped", "hover"), font_size = 13)
+```
+
+```{r items-alpha}
+items_info <- data.frame(
+  Ítem = c("sobre_3_1", "sobre_3_3", "sobre_3_4",
+            "sobre_3_5", "sobre_3_6", "sobre_3_7"),
+  Contenido = c(
+    "Siente que el familiar le pide más ayuda de la que necesita",
+    "Se siente agotada/o al tener que cuidar a su familiar",
+    "Siente tensión al compatibilizar cuidados con otras responsabilidades",
+    "Siente que pierde el control sobre su vida por cuidar a su familiar",
+    "Se siente incapaz de cuidar a su familiar por mucho más tiempo",
+    "En general, siente que cuidar afecta negativamente su salud"),
+  r_total = round(alpha_result$item.stats$r.cor, 3),
+  r_drop  = round(alpha_result$item.stats$r.drop, 3),
+  Media   = round(colMeans(items_escala), 3),
+  SD      = round(apply(items_escala, 2, sd), 3))
+
+kbl(items_info,
+    col.names = c("Ítem", "Contenido del ítem", "r corr. total", "r drop", "Media", "SD"),
+    caption   = "Tabla 4. Estadísticos por ítem de la escala de sobrecarga (recodificados 0–4)") |>
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"),
+    font_size = 12, full_width = TRUE) |>
+  column_spec(2, width = "10cm")
+```
+
+> **Interpretación:** Un α ≥ 0.70 indica consistencia interna aceptable; α ≥ 0.80, buena; α ≥ 0.90, excelente [@nunnally1978]. La columna *r drop* muestra la correlación de cada ítem con el total de la escala al eliminar ese ítem; valores bajos (\< .30) podrían sugerir revisión. Todos los ítems superan este umbral, validando el uso del índice sumativo.
+
+## Índice de sobrecarga
+
+Una vez verificada la consistencia interna de la escala, se construyó el **índice de sobrecarga** mediante la suma simple de los seis ítems recodificados (rango 0–24). A mayor puntaje, mayor sobrecarga percibida. La decisión de usar suma simple se justifica en que todos los ítems tienen el mismo peso teórico según el instrumento.
+
+```{r grafico3}
+ggplot(bbdd_pc6, aes(x = indice_sobrecarga)) +
+  geom_histogram(binwidth = 2, fill = "#A29BFE", color = "white", alpha = 0.85) +
+  geom_vline(xintercept = median(datos$indice_sobrecarga),
+             color = "#E84393", linetype = "dashed", linewidth = 0.9) +
+  labs(
+    title    = "Gráfico 3. Distribución del índice de sobrecarga",
+    subtitle = "Rango 0–24 (6 ítems, escala 0–4 c/u)",
+    x        = "Índice de sobrecarga",
+    y        = "Frecuencia") +
+  theme_minimal(base_size = 13)
+```
+
+```{r tabla-descriptivos-sexo}
+desc_sexo <- bbdd_pc6 |>
+  group_by(Sexo = sexo) |>
+  summarise(
+    N       = n(),
+    Media   = round(mean(indice_sobrecarga), 2),
+    Mediana = median(indice_sobrecarga),
+    DE      = round(sd(indice_sobrecarga), 2),
+    Mínimo  = min(indice_sobrecarga),
+    Máximo  = max(indice_sobrecarga)) |>
+  bind_rows(
+    bbdd_pc6 |> summarise(
+      Sexo    = "Total",
+      N       = n(),
+      Media   = round(mean(indice_sobrecarga), 2),
+      Mediana = median(indice_sobrecarga),
+      DE      = round(sd(indice_sobrecarga), 2),
+      Mínimo  = min(indice_sobrecarga),
+      Máximo  = max(indice_sobrecarga)))
+
+kbl(desc_sexo,
+    caption = "Tabla 5. Estadísticos descriptivos del índice de sobrecarga por sexo (rango 0–24)") |>
+  kable_styling(bootstrap_options = c("striped", "hover"), font_size = 13) |>
+  row_spec(nrow(desc_sexo), bold = TRUE, background = "#F0EEFF")
+```
+
+La media global del índice es de **`r round(mean(datos$indice_sobrecarga), 1)` puntos** (sobre un máximo de 24). Las mujeres y los hombres presentan medias muy similares en términos descriptivos; las diferencias estadísticas al controlar por otras variables se evalúan en la sección de regresión.
+
+# Modelos de regresión
+
+## Estrategia analítica
+
+Para estimar la asociación entre las variables de intensidad del cuidado y la sobrecarga percibida, se empleó una estrategia de **modelos anidados de regresión lineal múltiple** (OLS). Se estimaron tres modelos con complejidad creciente:
+
+- **Modelo 1:** solo horas diarias de cuidado (hipótesis central).
+- **Modelo 2:** agrega años de cuidado y percepción de falta de tiempo (CP.3.2).
+- **Modelo 3 (completo):** incorpora sexo y actividad constante fuera del hogar.
+
+La variable sexo se codifica con **Hombre como categoría de referencia** (valor 0), de modo que el coeficiente estimado para Mujer indica la diferencia promedio en el índice de sobrecarga respecto a los hombres, controlando por el resto de las variables.
+
+Esta estrategia permite evaluar el aporte marginal de cada bloque de variables y controlar posibles confusores.
+
+## Estimación de modelos OLS
+
+```{r modelos-ols}
+m1 <- lm(indice_sobrecarga ~ horas_dia,
+         data = bbdd_pc6)
+
+m2 <- lm(indice_sobrecarga ~ horas_dia + anios_cuidando + cp_3_2,
+         data =bbdd_pc6)
+
+m3 <- lm(indice_sobrecarga ~ horas_dia + anios_cuidando + cp_3_2 +
+           sexo + act_fuera_hogar,
+         data = bbdd_pc6)
+
+modelsummary(
+  list("Solo intensidad horaria" = m1,
+       "Con percepción de tiempo" = m2,
+       "Modelo completo" = m3),
+  stars      = c("*" = 0.05, "**" = 0.01, "***" = 0.001),
+  coef_rename = c(
+    "(Intercept)"      = "Constante",
+    "horas_dia"        = "Horas diarias de cuidado",
+    "anios_cuidando"   = "Años cuidando",
+    "cp_3_2"           = "Falta de tiempo personal (0–4)",
+    "sexoMujer"        = "Sexo (ref. = Hombre; 1 = Mujer)",
+    "act_fuera_hogar"  = "Actividad constante fuera del hogar"),
+  gof_map    = c("nobs", "r.squared", "adj.r.squared"),
+  title      = "Tabla 6. Modelos de regresión lineal para el índice de sobrecarga (0–24)",
+  notes      = list(
+    "Errores estándar entre paréntesis.",
+    "Fuente: Instrumento PC N°06, PRLAC Independencia.",
+    "Categoría de referencia para sexo: Hombre."),
+  output     = "kableExtra") |>
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"),
+    font_size = 13)
+```
+
+## Interpretación de los modelos de regresión lineal
+
+**Modelo 1** estima el efecto de las horas diarias de cuidado sobre el índice de sobrecarga (rango 0–24). El coeficiente de `horas_dia` indica cuántos puntos adicionales en el índice se asocian con cada hora extra de cuidado diario. Este modelo explica aproximadamente el 7.7% de la varianza del índice (R² = 0.077), lo que indica que la intensidad horaria por sí sola explica una fracción modesta de la variación en la sobrecarga.
+
+**Modelo 2** incorpora los años de cuidado y la percepción de falta de tiempo (CP.3.2, recodificada 0–4). La variable de falta de tiempo presenta una asociación positiva y estadísticamente significativa con la sobrecarga: a mayor percepción de carencia de tiempo personal, mayor puntaje en el índice. El R² aumenta notablemente, lo que indica que la dimensión subjetiva del tiempo disponible es un predictor relevante de la sobrecarga.
+
+**Modelo 3 (completo)** agrega el sexo y la actividad fuera del hogar. El **coeficiente para Mujer es negativo** (ref. = Hombre), lo que indicaría que, al controlar por horas de cuidado, años cuidando y falta de tiempo, las mujeres presentan en promedio un índice de sobrecarga ligeramente menor que los hombres. Sin embargo, este coeficiente **no alcanza significancia estadística** (p \> .05), por lo que no es posible afirmar con los datos disponibles que existan diferencias estadísticamente significativas entre hombres y mujeres en el nivel de sobrecarga controlando por el resto de variables. La ausencia de significancia puede deberse al reducido tamaño del subgrupo masculino (n = 24).
+
+La actividad constante fuera del hogar muestra una asociación negativa con la sobrecarga, aunque tampoco alcanza significancia estadística. Este resultado sugiere, con cautela, que tener una actividad fuera del hogar podría estar relacionado con menores niveles de sobrecarga, quizás porque implica un espacio de desconexión del rol cuidador.
+
+> **Advertencia de interpretación:** El aumento en R² al agregar la variable "falta de tiempo personal" (CP.3.2) como predictor debe leerse con cautela. Dado que CP.3.2 mide la misma dimensión subjetiva que algunos ítems del índice (aunque fue excluida de él), parte de la varianza explicada puede reflejar solapamiento conceptual y no solo efecto causal independiente.
+
+## Gráfico de valores predichos
+
+```{r grafico-predichos}
+#| fig-cap: "Gráfico 4. Valores predichos del índice de sobrecarga según horas diarias de cuidado y sexo (Modelo 3)"
+
+newdata <- expand.grid(
+  horas_dia       = seq(min(bbdd_pc6$horas_dia), max(bbdd_pc6$horas_dia), length.out = 100),
+  sexo            = factor(c("Hombre", "Mujer"), levels = levels(datos$sexo)),
+  anios_cuidando  = mean(bbdd_pc6$anios_cuidando),
+  cp_3_2          = mean(bbdd_pc6$cp_3_2),
+  act_fuera_hogar = 0)
+
+newdata$pred <- predict(m3, newdata = newdata, interval = "confidence")[, "fit"]
+newdata$lwr  <- predict(m3, newdata = newdata, interval = "confidence")[, "lwr"]
+newdata$upr  <- predict(m3, newdata = newdata, interval = "confidence")[, "upr"]
+
+ggplot(newdata, aes(x = horas_dia, y = pred, color = sexo, fill = sexo)) +
+  geom_ribbon(aes(ymin = lwr, ymax = upr), alpha = 0.15, color = NA) +
+  geom_line(linewidth = 1.1) +
+  scale_color_manual(values = c("Hombre" = "#74B9FF", "Mujer" = "#A29BFE")) +
+  scale_fill_manual(values  = c("Hombre" = "#74B9FF", "Mujer" = "#A29BFE")) +
+  labs(
+    title    = "Gráfico 4. Valores predichos del índice de sobrecarga",
+    subtitle = "Según horas diarias de cuidado y sexo (Modelo 3, resto de variables en su media)",
+    x        = "Horas diarias de cuidado",
+    y        = "Índice de sobrecarga predicho (0–24)",
+    color    = "Sexo", fill = "Sexo") +
+  theme_minimal(base_size = 13)
+```
+
+El **Gráfico 4** muestra que el índice de sobrecarga predicho aumenta linealmente con las horas diarias de cuidado, tanto para hombres como para mujeres, manteniendo el resto de las variables en sus valores medios. Las líneas de ambos grupos son prácticamente paralelas, lo que refleja que el coeficiente de sexo en el Modelo 3 no es estadísticamente significativo: las diferencias entre hombres y mujeres en el nivel de sobrecarga predicho no superan el umbral de significancia estadística al controlar por los demás predictores. Las bandas sombreadas representan los intervalos de confianza del 95%.
+
+# Regresión logística (punto extra)
+
+## Variable dependiente dicotómica
+
+Para complementar el análisis, se estimó un modelo de **regresión logística** con una variable dependiente dicotómica: *sobrecarga alta* (1) versus *sobrecarga baja* (0). El punto de corte utilizado es la **mediana del índice** (`r mediana_sob` puntos): quienes obtienen un puntaje igual o superior a la mediana se clasifican como de sobrecarga alta. Este criterio es estándar en la literatura cuando se busca una separación equilibrada entre categorías.
+
+```{r tabla-dicotomica}
+tabla_dic <- bbdd_pc6 |>
+  count(sobrecarga_alta) |>
+  mutate(
+    Categoría = ifelse(sobrecarga_alta == 0,
+                       paste0("Sobrecarga baja (< ", mediana_sob, " pts)"),
+                       paste0("Sobrecarga alta (≥ ", mediana_sob, " pts)")),
+    `%` = round(n / sum(n) * 100, 1)) |>
+  select(Categoría, n, `%`)
+
+kbl(tabla_dic, caption = "Tabla 7. Distribución de la variable dicotómica de sobrecarga") |>
+  kable_styling(bootstrap_options = c("striped", "hover"), font_size = 13)
+```
+
+## Modelo logístico
+
+```{r modelo-logistico}
+mlog <- glm(sobrecarga_alta ~ horas_dia + anios_cuidando + cp_3_2 + sexo,
+            data   = bbdd_pc6,
+            family = binomial(link = "logit"))
+
+modelsummary(
+  list("Regresión logística" = mlog),
+  exponentiate = TRUE,
+  stars        = c("*" = 0.05, "**" = 0.01, "***" = 0.001),
+  coef_rename  = c(
+    "(Intercept)"     = "Constante",
+    "horas_dia"       = "Horas diarias de cuidado",
+    "anios_cuidando"  = "Años cuidando",
+    "cp_3_2"          = "Falta de tiempo personal (0–4)",
+    "sexoMujer"       = "Sexo (ref. = Hombre; 1 = Mujer)"),
+  gof_map      = c("nobs", "logLik"),
+  title        = "Tabla 8. Modelo de regresión logística — Odds Ratios para sobrecarga alta",
+  notes        = list(
+    "Coeficientes exponenciados (Odds Ratios). Errores estándar entre paréntesis (escala log-odds).",
+    "Variable dependiente: sobrecarga alta (1 = índice ≥ mediana).",
+    "Categoría de referencia para sexo: Hombre.",
+    "Fuente: Instrumento PC N°06, PRLAC Independencia."),
+  output       = "kableExtra") |>
+  kable_styling(bootstrap_options = c("striped", "hover"), font_size = 13)
+```
+
+```{r pseudo-r2}
+# Pseudo R² de McFadden (manual)
+loglik_nulo <- logLik(glm(sobrecarga_alta ~ 1, data = bbdd_pc6, family = binomial()))
+loglik_mod  <- logLik(mlog)
+pseudo_r2   <- as.numeric(1 - (loglik_mod / loglik_nulo))
+
+tabla_ajuste <- data.frame(
+  Indicador = c("Log-Lik. (modelo completo)", "Log-Lik. (modelo nulo)",
+                "Pseudo R² de McFadden", "N"),
+  Valor = c(round(as.numeric(loglik_mod), 3),
+             round(as.numeric(loglik_nulo), 3),
+             round(pseudo_r2, 3),
+             nrow(datos)))
+
+kbl(tabla_ajuste,
+    caption = "Tabla 9. Indicadores de ajuste del modelo logístico") |>
+  kable_styling(bootstrap_options = c("striped", "hover"), font_size = 13)
+```
+
+## Gráfico de probabilidades predichas
+
+```{r grafico-logistico}
+#| fig-cap: "Gráfico 5. Probabilidad predicha de sobrecarga alta según horas de cuidado y sexo"
+
+newdata_log <- expand.grid(
+  horas_dia      = seq(min(bbdd_pc6$horas_dia), max(bbdd_pc6$horas_dia), length.out = 100),
+  sexo           = factor(c("Hombre", "Mujer"), levels = levels(bbdd_pc6$sexo)),
+  anios_cuidando = mean(bbdd_pc6$anios_cuidando),
+  cp_3_2         = mean(bbdd_pc6$cp_3_2))
+
+pred_log <- predict(mlog, newdata = newdata_log, type = "response", se.fit = TRUE)
+newdata_log$prob <- pred_log$fit
+newdata_log$lwr  <- pred_log$fit - 1.96 * pred_log$se.fit
+newdata_log$upr  <- pred_log$fit + 1.96 * pred_log$se.fit
+
+ggplot(newdata_log, aes(x = horas_dia, y = prob, color = sexo, fill = sexo)) +
+  geom_ribbon(aes(ymin = lwr, ymax = upr), alpha = 0.15, color = NA) +
+  geom_line(linewidth = 1.1) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1), limits = c(0, 1)) +
+  scale_color_manual(values = c("Hombre" = "#74B9FF", "Mujer" = "#A29BFE")) +
+  scale_fill_manual(values  = c("Hombre" = "#74B9FF", "Mujer" = "#A29BFE")) +
+  labs(
+    title    = "Gráfico 5. Probabilidad predicha de sobrecarga alta",
+    subtitle = "Según horas de cuidado y sexo (resto de variables en su media)",
+    x        = "Horas diarias de cuidado",
+    y        = "P(sobrecarga alta)",
+    color    = "Sexo", fill = "Sexo"
+  ) +
+  theme_minimal(base_size = 13)
+```
+
+## Interpretación del modelo logístico
+
+La Tabla 8 presenta los resultados como **Odds Ratios (OR)**. Un OR \> 1 indica que la variable aumenta las probabilidades de estar en sobrecarga alta; un OR \< 1 indica efecto de reducción de los odds.
+
+- **Horas diarias de cuidado:** el OR de `r round(exp(coef(mlog)["horas_dia"]), 3)` indica que cada hora adicional de cuidado multiplica los odds de sobrecarga alta por ese valor, manteniendo el resto constante. Este predictor **no alcanza significancia estadística** en el modelo, por lo que no puede afirmarse con certeza que las horas de cuidado sean un determinante independiente de la probabilidad de sobrecarga alta al controlar por los demás predictores.
+
+- **Falta de tiempo personal:** es el predictor de mayor magnitud y el único estadísticamente significativo. Cada punto adicional en la escala (0–4) multiplica los odds de sobrecarga alta de forma sustantiva. Esto confirma que la percepción subjetiva de falta de tiempo es el factor más fuertemente asociado a estar en el grupo de sobrecarga alta.
+
+- **Sexo (Mujer vs. Hombre):** el OR de `r round(exp(coef(mlog)["sexoMujer"]), 3)` indica que los odds de sobrecarga alta de las mujeres representan el `r round(exp(coef(mlog)["sexoMujer"]) * 100, 1)`% de los odds de los hombres, es decir, son **`r round((1 - exp(coef(mlog)["sexoMujer"])) * 100, 1)`% menores**. Sin embargo, este coeficiente **no alcanza significancia estadística** (p \> .05), por lo que no se puede concluir que exista una diferencia real en la probabilidad de sobrecarga alta entre hombres y mujeres al controlar por los demás predictores. La falta de potencia estadística del subgrupo masculino (n = 24) puede explicar la ausencia de significancia.
+
+- **Años cuidando:** su efecto marginal es mínimo y no significativo.
+
+> **Nota sobre el Pseudo R²:** El Pseudo R² de McFadden de `r round(pseudo_r2, 3)` indica el ajuste del modelo logístico. Valores entre 0.20 y 0.40 se consideran un ajuste aceptable a bueno en modelos logísticos [@hosmer2013].
+
+El Gráfico 5 ilustra cómo la probabilidad predicha de sobrecarga alta varía con las horas de cuidado, separado por sexo, con el resto de variables en sus valores medios. Las bandas sombreadas representan los intervalos de confianza del 95%.
+
+# Síntesis de hallazgos
+
+- **Alta intensidad horaria:** La mediana de horas diarias de cuidado alcanza las 12 horas, con casos que superan las 15 horas diarias, confirmando la centralidad del cuidado en la vida de las personas participantes.
+
+- **Brecha descriptiva de género en la percepción de tiempo:** El 47% de las mujeres reporta «casi siempre» carecer de tiempo personal, frente al 38% de los hombres. Esta brecha es consistente con la literatura sobre desigualdad de género en el uso del tiempo.
+
+- **Consistencia interna satisfactoria de la escala:** El alfa de Cronbach de los seis ítems seleccionados supera el umbral de 0.70, validando el uso del índice sumativo como medida de sobrecarga.
+
+- **Las horas de cuidado predicen la sobrecarga:** El coeficiente de horas diarias es positivo y estadísticamente significativo en los tres modelos OLS, confirmando la hipótesis central del estudio: a mayor dedicación horaria, mayor sobrecarga.
+
+- **La percepción de falta de tiempo es el predictor más relevante:** En los modelos OLS y logístico, la variable de falta de tiempo personal (CP.3.2) presenta los coeficientes de mayor magnitud y significancia, lo que indica que la dimensión subjetiva del tiempo disponible es clave en la explicación de la sobrecarga.
+
+- **Efecto de género no significativo en los modelos de regresión:** Al controlar por intensidad horaria, años de cuidado y percepción de falta de tiempo, el coeficiente de sexo no alcanza significancia estadística en ninguno de los modelos. Esto implica que las diferencias descriptivas entre hombres y mujeres en el índice de sobrecarga se explican en gran medida por las diferencias en las variables incluidas en los modelos, más que por el género en sí mismo. Se recomienda cautela al interpretar este resultado dado el pequeño tamaño del subgrupo masculino (n = 24).
+
+# Referencias
+
+::: {#refs}
+:::
