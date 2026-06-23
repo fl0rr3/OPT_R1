@@ -1,0 +1,331 @@
+---
+title: "Rol de cuidado y sobrecarga emocional"
+subtitle: "Un estudio sobre pérdida de autonomía de las personas cuidadoras en la comuna de Independencia · PRLAC"
+author: "Antonia Arce – Florencia Pastenes A."
+date: "Junio 2026"
+format:
+  revealjs:
+    theme: sky
+    transition: slide
+    slide-number: true
+    logo: ""
+    footer: "R para Análisis Estadístico · 2026"
+    css: styles.css
+    highlight-style: github
+lang: es
+---
+
+## Estructura de la presentación
+
+| N° | Sección |
+|----|---------|
+| 01 | Introducción & contexto |
+| 02 | Pregunta & objetivos |
+| 03 | Datos & metodología |
+| 04 | Operacionalización |
+| 05 | Estadística descriptiva |
+| 06 | Análisis bivariado |
+| 07 | Regresión (OLS & logística) |
+| 08 | Conclusiones |
+
+---
+
+## Introducción & contexto
+
+::: {.columns}
+::: {.column width="60%"}
+- El trabajo de cuidados ha sido históricamente **invisibilizado y asignado a las mujeres**.
+- Las mujeres destinan casi el **doble de tiempo** que los hombres a tareas de cuidado no remunerado (Ministerio de la Mujer, 2023).
+- El envejecimiento poblacional intensifica la **"crisis de los cuidados"**: mayor demanda con insuficiente apoyo institucional.
+- Las responsabilidades recaen principalmente en hogares y, dentro de ellos, en **las mujeres**.
+:::
+::: {.column width="40%"}
+
+:::: {.callout-note icon=false}
+## 131
+personas cuidadoras en la muestra
+::::
+
+:::: {.callout-note icon=false}
+## 82%
+son mujeres (n = 107)
+::::
+
+:::: {.callout-note icon=false}
+## ~12 h
+mediana de horas de cuidado diarias
+::::
+
+:::
+:::
+
+---
+
+## Pregunta de investigación & objetivos
+
+> **¿En qué medida la intensidad del rol de cuidado se asocia con la sobrecarga emocional percibida por las personas cuidadoras del PRLAC de Independencia?**
+
+**Hipótesis:** A mayor dedicación horaria al cuidado, mayor será la sobrecarga percibida — y la percepción de falta de tiempo personal actuará como mediador clave.
+
+::: {.columns}
+::: {.column width="33%"}
+**Objetivo 1**
+
+Describir la intensidad del rol de cuidado (horas diarias, años) y la percepción de sobrecarga.
+:::
+::: {.column width="33%"}
+**Objetivo 2**
+
+Analizar la relación entre intensidad horaria y el índice de sobrecarga mediante análisis bivariado y regresión OLS.
+:::
+::: {.column width="33%"}
+**Objetivo 3**
+
+Estimar modelos logísticos para identificar predictores de sobrecarga alta, incluyendo sexo y falta de tiempo.
+:::
+:::
+
+---
+
+## Datos & diseño metodológico
+
+::: {.columns}
+::: {.column width="50%"}
+**Fuente de datos**
+Instrumento PC N°06 del PRLAC, comuna de Independencia.
+
+**Muestra**
+n = 131 personas cuidadoras: 107 mujeres (82%) y 24 hombres (18%).
+
+**Diseño**
+Cuantitativo, transversal. Análisis descriptivo, bivariado y multivariado con R.
+:::
+::: {.column width="50%"}
+**Variable dependiente**
+Índice de sobrecarga (0–24), suma de 6 ítems.
+
+**Variables independientes**
+Horas diarias, años cuidando, falta de tiempo personal.
+
+**Recodificación**
+Ítems CP.3.1–3.7 recodificados de escala 1–5 a 0–4. CP.3.2 excluido del índice por colinealidad perfecta.
+
+**Modelos estimados**
+3 modelos OLS anidados + 1 modelo logístico.
+:::
+:::
+
+---
+
+## Operacionalización de variables
+
+| Variable | Ítem | Nivel | Rol |
+|---|---|---|---|
+| Años cuidando | CP_2_1 | Razón | Independiente |
+| Horas diarias de cuidado | CP_2_2 | Razón | Independiente |
+| Actividad fuera del hogar | CP_2_8 | Nominal dicotómica | Control |
+| Falta de tiempo personal | CP.3.2 | Ordinal (0–4) | Independiente |
+| Ítems sobrecarga (6 ítems) | CP.3.1, 3.3–3.7 | Ordinal (0–4) | Ítems del índice |
+| **Índice de sobrecarga (VD)** | Suma CP.3.1, 3.3–3.7 | Razón (0–24) | **DEPENDIENTE** |
+
+> *CP.3.2 excluida del índice por colinealidad perfecta con el predictor del mismo nombre.*
+
+---
+
+## Estadística descriptiva: Intensidad del cuidado
+
+::: {.columns}
+::: {.column width="40%"}
+
+:::: {.callout-tip icon=false}
+## 12 h
+Mediana de horas de cuidado diarias
+::::
+
+:::: {.callout-tip icon=false}
+## 12,8 h
+Media de horas de cuidado diarias
+::::
+
+:::: {.callout-tip icon=false}
+## ~24%
+Jornada de 15+ horas diarias
+::::
+
+:::
+::: {.column width="60%"}
+La dedicación se concentra en torno a **12 horas diarias**.
+
+Un grupo significativo — aproximadamente **1 de cada 4** — cuida más de 15 horas, lo que equivale a una ocupación de tiempo casi completo.
+:::
+:::
+
+---
+
+## Descriptiva: Falta de tiempo personal según sexo
+
+::: {.columns}
+::: {.column width="33%"}
+:::: {.callout-warning icon=false}
+## 47%
+Mujeres con «Casi siempre» sin tiempo personal
+::::
+:::
+::: {.column width="33%"}
+:::: {.callout-warning icon=false}
+## 38%
+Hombres con «Casi siempre» sin tiempo personal
+::::
+:::
+::: {.column width="33%"}
+:::: {.callout-caution icon=false}
+## +9 pp
+Brecha de género en falta de tiempo
+::::
+:::
+:::
+
+Las mujeres reportan falta de tiempo propio con **mayor frecuencia**. Esta brecha descriptiva es consistente con la literatura sobre desigualdad de género en el uso del tiempo.
+
+---
+
+## Análisis bivariado & consistencia de la escala
+
+::: {.columns}
+::: {.column width="50%"}
+**Consistencia interna – α de Cronbach**
+
+- 6 ítems: CP.3.1 y CP.3.3–CP.3.7
+- **α > 0.70** (umbral aceptado)
+- Los 6 ítems seleccionados miden un constructo común (sobrecarga)
+- El índice sumativo queda **validado**
+:::
+::: {.column width="50%"}
+**Principales correlaciones**
+
+- Correlaciones positivas entre ítems → miden sobrecarga como constructo único
+- Horas diarias ↔ sobrecarga: asociación positiva en la dirección esperada
+- Falta de tiempo (CP.3.2) ↔ ítems: correlación positiva fuerte
+- CP.3.2 ↔ ítem 3.2: **r = 1.00** → identidad matemática → excluida del índice
+:::
+:::
+
+---
+
+## Índice de sobrecarga: distribución por sexo
+
+| Sexo | N | Media | Mediana | DE |
+|------|---|-------|---------|-----|
+| Hombre | 24 | ~12.5 | ~12 | ~6.5 |
+| Mujer | 107 | ~12.3 | ~12 | ~6.4 |
+| **Total** | **131** | **~12.3** | **~12** | **~6.4** |
+
+*Tabla 5. Estadísticos descriptivos del índice de sobrecarga por sexo*
+
+Hombres y mujeres presentan **medias similares** en el índice de sobrecarga. Las diferencias descriptivas se evalúan con los modelos de regresión controlando por el resto de variables.
+
+---
+
+## Modelos de regresión OLS (modelos anidados)
+
+::: {.columns}
+::: {.column width="33%"}
+**Modelo 1**
+
+Solo horas diarias: **R² = 0.077**
+
+Cada hora adicional se asocia con un aumento positivo en el índice de sobrecarga.
+:::
+::: {.column width="33%"}
+**Modelo 2**
+
++ Falta de tiempo (CP.3.2): **R² = 0.245**
+
+La percepción subjetiva del tiempo es el predictor con **mayor magnitud y significancia**.
+:::
+::: {.column width="33%"}
+**Modelo 3**
+
++ Sexo y actividad fuera del hogar: **R² = 0.258**
+
+El coeficiente de Mujer es negativo pero **NO significativo** (p > .05).
+:::
+:::
+
+> *Nota: El subgrupo masculino reducido (n = 24) puede limitar la potencia estadística para detectar diferencias de sexo.*
+
+---
+
+## Modelo logístico: Predictores de sobrecarga alta
+
+::: {.columns}
+::: {.column width="33%"}
+:::: {.callout-important icon=false}
+## OR = 1.58 ★
+**Falta de tiempo personal (CP.3.2)**
+
+Único predictor estadísticamente significativo. Cada punto más en la escala 0–4 multiplica los odds de sobrecarga alta.
+::::
+:::
+::: {.column width="33%"}
+:::: {.callout-note icon=false}
+## OR ≈ 1.05
+**Horas diarias de cuidado**
+
+Efecto positivo pero NO significativo al controlar por los demás predictores.
+::::
+:::
+::: {.column width="33%"}
+:::: {.callout-note icon=false}
+## OR ≈ 0.82
+**Sexo (Mujer vs. Hombre)**
+
+Odds ligeramente menores en mujeres, pero NO significativo (p > .05).
+::::
+:::
+:::
+
+> ★ único predictor significativo al 95% de confianza · Pseudo R² McFadden: ajuste aceptable (0.20–0.40)
+
+---
+
+## Conclusiones & hallazgos principales
+
+::: {.columns}
+::: {.column width="50%"}
+**① Alta intensidad del cuidado**
+Mediana de 12 h/día. ~24% cuida más de 15 h/día.
+
+**② Brecha descriptiva de género**
+47% mujeres vs. 38% hombres reporta «casi siempre» carecer de tiempo personal (+9 pp).
+
+**③ Escala válida y confiable**
+α de Cronbach > 0.70 para los 6 ítems, validando el índice sumativo.
+:::
+::: {.column width="50%"}
+**④ Las horas predicen sobrecarga**
+Coeficiente positivo y significativo en los 3 modelos OLS.
+
+**⑤ Falta de tiempo: predictor clave**
+OR = 1.58, único estadísticamente significativo en el modelo logístico.
+
+**⑥ Sexo: sin efecto significativo**
+Al controlar por intensidad horaria, el sexo no es significativo. El n reducido de hombres (n=24) limita la potencia estadística.
+:::
+:::
+
+---
+
+## ¡Gracias!
+
+**Rol de cuidado y sobrecarga emocional en personas cuidadoras del PRLAC de Independencia**
+
+Antonia Arce – Florencia Pastenes A.
+R para Análisis Estadístico · Junio 2026
+
+---
+
+*Limitaciones del estudio*
+
+- Los datos del instrumento PC N°06 no incluyen ítems directos sobre redes de apoyo social.
+- La muestra masculina reducida (n=24) limita las comparaciones de género.
